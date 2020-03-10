@@ -490,6 +490,19 @@ one, you need to adjust the properties and add the relations.
     userCredentials: UserCredentials;
   ```
 
+- For all the three models above, allow generating their `id` field:
+  ```ts
+    @property({
+    type: 'number',
+    id: 1,
+    // change it from `true` to `false`
+    generated: false,
+    updateOnly: true,
+  })
+  // change it from optional `id?` to required `id`
+  id: number;
+  ```
+
 For model `UserCredentials`, you need to create it by `lb4 model`:
 
 ```sh

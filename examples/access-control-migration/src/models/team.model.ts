@@ -10,10 +10,10 @@ export class Team extends Entity {
   @property({
     type: 'number',
     id: 1,
-    generated: true,
+    generated: false,
     updateOnly: true,
   })
-  id?: number;
+  id: number;
 
   @property({
     type: 'number',
