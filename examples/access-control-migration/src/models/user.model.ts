@@ -3,36 +3,59 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {Entity, model, property, hasMany, hasOne} from '@loopback/repository';
+import {Entity, hasMany, hasOne, model, property} from '@loopback/repository';
 import {Team} from './team.model';
 import {UserCredentials} from './user-credentials.model';
 
-@model({settings: {strict: false}})
+@model({
+  settings: {
+    strict: false,
+  },
+})
 export class User extends Entity {
+  // must keep it
   @property({
     type: 'number',
-    id: true,
-    generated: false,
+    id: 1,
+    generated: true,
+    updateOnly: true,
   })
   id: number;
 
   @property({
     type: 'string',
-    required: true,
   })
-  username: string;
+  realm?: string;
 
+  // must keep it
+  @property({
+    type: 'string',
+  })
+  username?: string;
+
+  // must keep it
   @property({
     type: 'string',
     required: true,
   })
   email: string;
 
+  @property({
+    type: 'boolean',
+  })
+  emailVerified?: boolean;
+
+  @property({
+    type: 'string',
+  })
+  verificationToken?: string;
+
   @hasMany(() => Team, {keyTo: 'ownerId'})
   teams: Team[];
 
   @hasOne(() => UserCredentials)
   userCredentials: UserCredentials;
+
   // Define well-known properties here
 
   // Indexer property to allow additional data

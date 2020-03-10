@@ -446,143 +446,51 @@ Try the 'team-member' role:
 
 ### Model Creation
 
-Create User Model
+Import model `User`, `Project`, `Team` by the migration CLI:
 
 ```sh
-$ lb4 model
-? Model class name: User
-? Please select the model base class Entity (A persisted model with an ID)
-? Allow additional (free-form) properties? Yes
-Model User will be created in src/models/user.model.ts
-
-Lets add a property to User
-Enter an empty property name when done
-
-? Enter the property name: id
-? Property type: number
-? Is id the ID property? Yes
-? Is id generated automatically? No
-? Is it required?: Yes
-? Default value [leave blank for none]:
-
-Lets add another property to User
-Enter an empty property name when done
-
-? Enter the property name: username
-? Property type: string
-? Is it required?: Yes
-? Default value [leave blank for none]:
-
-Lets add another property to User
-Enter an empty property name when done
-
-? Enter the property name: email
-? Property type: string
-? Is it required?: Yes
-? Default value [leave blank for none]:
-
-Lets add another property to User
-Enter an empty property name when done
-
-? Enter the property name:
-   create src/models/user.model.ts
-   update src/models/index.ts
-
-Model User was created in src/models/
+lb4 import-lb3-models <path_to_loopback-example-access-control> --outDir src/models
 ```
 
-Create Team Model
+Choose model `User`, `Project`, `Team` for the prompt.
 
-```sh
-$ lb4 model
-? Model class name: Team
-? Please select the model base class Entity (A persisted model with an ID)
-? Allow additional (free-form) properties? Yes
-Model Team1 will be created in src/models/team.model.ts
+Considering the difference between the original application and the migrated
+one, you need to adjust the properties and add the relations.
 
-Lets add a property to Team
-Enter an empty property name when done
+- For `Project`, open file `src/models/project.model.ts`
 
-? Enter the property name: id
-? Property type: number
-? Is id the ID property? Yes
-? Is id generated automatically? No
-? Is it required?: Yes
-? Default value [leave blank for none]:
+  - decorate `ownerId` with `@belongsTo(() => User)` and remove the generated
+    `@property` decorator.
+  - `balance` should be a required property: change it from `balance?` to
+    `balance`
 
-Lets add another property to Team
-Enter an empty property name when done
+- For `Team`, open file `src/models/team.model.ts`
 
-? Enter the property name: ownerId
-? Property type: number
-? Is it required?: Yes
-? Default value [leave blank for none]:
+  - replace `memberId` with `memberIds` as an array:
+    ```ts
+      @property({
+        type: 'array',
+        itemType: 'number',
+        required: true,
+      })
+      memberIds: number[];
+    ```
 
-Lets add another property to Team
-Enter an empty property name when done
+- For `User`, open file `src/models/user.model.ts`
 
-? Enter the property name: memberIds
-? Property type: array
-? Type of array items: number
-? Is it required?: Yes
-? Default value [leave blank for none]:
+  - remove `password` because we have a `UserCredential` model created to
+    separate it from `User`
+  - add relations:
 
-Lets add another property to Team
-Enter an empty property name when done
+  ```ts
+    @hasMany(() => Team, {keyTo: 'ownerId'})
+    teams: Team[];
 
-? Enter the property name:
-   create src/models/team.model.ts
-   update src/models/index.ts
+    @hasOne(() => UserCredentials)
+    userCredentials: UserCredentials;
+  ```
 
-Model Team was created in src/models/
-```
-
-Create Project Model
-
-```sh
-$ lb4 model
-? Model class name: Project
-? Please select the model base class Entity (A persisted model with an ID)
-? Allow additional (free-form) properties? Yes
-Model Project1 will be created in src/models/project.model.ts
-
-Lets add a property to Project
-Enter an empty property name when done
-
-? Enter the property name: id
-? Property type: number
-? Is id the ID property? Yes
-? Is id generated automatically? No
-? Is it required?: Yes
-? Default value [leave blank for none]:
-
-Lets add another property to Project
-Enter an empty property name when done
-
-? Enter the property name: name
-? Property type: string
-? Is it required?: Yes
-? Default value [leave blank for none]:
-
-Lets add another property to Project
-Enter an empty property name when done
-
-? Enter the property name: balance
-? Property type: number
-? Is it required?: Yes
-? Default value [leave blank for none]:
-
-Lets add another property to Project
-Enter an empty property name when done
-
-? Enter the property name:
-   create src/models/project.model.ts
-   update src/models/index.ts
-
-Model Project was created in src/models/
-```
-
-Create UserCredentials
+For model `UserCredentials`, you need to create it by `lb4 model`:
 
 ```sh
 $ lb4 model
