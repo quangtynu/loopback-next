@@ -30,6 +30,9 @@ const EXAMPLES = {
     'controllers, interceptors, and observers.',
   'lb3-application':
     'An example LoopBack 3 application mounted in a LoopBack 4 project.',
+  'rest-crud':
+    'A simplified version of the Todo example using the default repository' +
+    'and controller without defining classes for them.',
 };
 Object.freeze(EXAMPLES);
 
