@@ -1,7 +1,7 @@
 # @loopback/example-rest-crud
 
-This is a basic example demonstrating how to use default CRUD REST repository
-and controller with a single model class.
+This is a basic example demonstrating how to use the default CRUD REST
+repository and controller with a single model class and datasource.
 
 ## Overview
 

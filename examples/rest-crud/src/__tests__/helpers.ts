@@ -22,6 +22,7 @@ export function givenTodo(todo?: Partial<Todo>) {
   return new Todo(data);
 }
 
+// Type alias used for tests (not an actual repository class)
 export type TodoRepository = EntityCrudRepository<
   Todo,
   typeof Todo.prototype.id
